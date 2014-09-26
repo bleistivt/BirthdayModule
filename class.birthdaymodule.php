@@ -7,7 +7,7 @@ class BirthdayModule extends Gdn_Module {
 	
 	protected function GetBirthdays() {
 		$Birthdays = json_decode(Gdn::Get('BirthdayModule.Birthdays'));
-		if ($Birthdays && $Birthdays[0] == date('y-m-d'))
+		if ($Birthdays && $Birthdays[0] == date('y-m-d/H'))
 			return $Birthdays[1];
 		$Px = Gdn::Database()->DatabasePrefix;
 		$Birthdays = Gdn::SQL()
@@ -17,7 +17,7 @@ class BirthdayModule extends Gdn_Module {
 			->Get()
 			->Result(DATASET_TYPE_ARRAY);
 		$Birthdays = ConsolidateArrayValuesByKey($Birthdays, 'UserID');
-		Gdn::Set('BirthdayModule.Birthdays', json_encode(array(date('y-m-d'), $Birthdays)));
+		Gdn::Set('BirthdayModule.Birthdays', json_encode(array(date('y-m-d/H'), $Birthdays)));
 		return $Birthdays;
 	}
 
