@@ -17,7 +17,6 @@ class BirthdayModule extends Gdn_Module {
 			->Get()
 			->Result(DATASET_TYPE_ARRAY);
 		$Birthdays = ConsolidateArrayValuesByKey($Birthdays, 'UserID');
-		$Birthdays = array_diff($Birthdays, array(Gdn::UserModel()->GetSystemUserID()));
 		Gdn::Set('BirthdayModule.Birthdays', json_encode(array(date('y-m-d'), $Birthdays)));
 		return $Birthdays;
 	}
