@@ -11,11 +11,21 @@ class BirthdayModule extends Gdn_Module {
         if ($Birthdays && $Birthdays[0] == date('y-m-d/H')) {
             return $Birthdays[1];
         }
+        $GuestTimeZone = C('Garden.GuestTimeZone');
+        $Date = new DateTime();
+        if ($GuestTimeZone) {
+            try {
+                $TimeZone = new DateTimeZone($GuestTimeZone);
+                $HourOffset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
+                $HourOffset = - floor($HourOffset / 3600);
+                $Date->modify("$HourOffset hours");
+            } catch (Exception $e) {}
+        }
         $Px = Gdn::Database()->DatabasePrefix;
         $Birthdays = Gdn::SQL()
             ->Select('UserID')
             ->From('User')
-            ->Where("DATE_FORMAT(DateOfBirth, '%m-%d')", date("'m-d'"), false, false)
+            ->Where("DATE_FORMAT(DateOfBirth, '%m-%d')", $Date->format("'m-d'"), false, false)
             ->Get()
             ->Result(DATASET_TYPE_ARRAY);
         $Birthdays = ConsolidateArrayValuesByKey($Birthdays, 'UserID');

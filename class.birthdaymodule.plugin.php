@@ -3,7 +3,7 @@
 $PluginInfo['BirthdayModule'] = array(
     'Name' => 'Birthday Module',
     'Description' => 'Adds a module showing today\'s birthdays to the Panel. Requires ProfileExtender with the "Birthday" field enabled.',
-    'Version' => '0.1',
+    'Version' => '0.2',
     'Author' => 'Bleistivt',
     'AuthorUrl' => 'http://bleistivt.net'
 );
