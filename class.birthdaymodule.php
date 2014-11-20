@@ -21,7 +21,6 @@ class BirthdayModule extends Gdn_Module {
                 $Date->modify("$HourOffset hours");
             } catch (Exception $e) {}
         }
-        $Px = Gdn::Database()->DatabasePrefix;
         $Birthdays = Gdn::SQL()
             ->Select('UserID')
             ->From('User')
