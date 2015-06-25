@@ -1,4 +1,4 @@
-<?php if (!defined('APPLICATION')) exit();
+<?php
 
 $PluginInfo['BirthdayModule'] = array(
     'Name' => 'Birthday Module',
@@ -11,16 +11,14 @@ $PluginInfo['BirthdayModule'] = array(
 
 class BirthdayModulePlugin extends Gdn_Plugin {
 
-    public function Base_Render_Before($Sender) {
-        if ($Sender->MasterView == 'admin') {
-            return;
+    public function base_render_before($sender) {
+        if ($sender->MasterView != 'admin') {
+            $sender->addModule('BirthdayModule');
         }
-        $BirthdayModule = new BirthdayModule();
-        $Sender->AddModule($BirthdayModule);
     }
 
-    public function OnDisable() {
-        Gdn::Set('BirthdayModule.Birthdays', null);
+    public function onDisable() {
+        Gdn::set('BirthdayModule.Birthdays', null);
     }
 
 }
