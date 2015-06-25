@@ -9,11 +9,11 @@ class BirthdayModule extends Gdn_Module {
     protected function getBirthdays() {
         $birthdays = json_decode(Gdn::get('BirthdayModule.Birthdays'));
         $token = date('y-m-d/H');
-        
+
         if ($birthdays && $birthdays[0] == $token) {
             return $birthdays[1];
         }
-        
+
         $date = new DateTime();
         if ($guestTimeZone = C('Garden.GuestTimeZone')) {
             try {
@@ -23,7 +23,7 @@ class BirthdayModule extends Gdn_Module {
                 $date->modify("$offset hours");
             } catch (Exception $e) {}
         }
-        
+
         $birthdays = Gdn::sql()
             ->select('UserID')
             ->from('User')
