@@ -1,51 +1,54 @@
-<?php if (!defined('APPLICATION')) exit();
+<?php
 
 class BirthdayModule extends Gdn_Module {
 
-    public function AssetTarget() {
+    public function assetTarget() {
         return 'Panel';
     }
 
-    protected function GetBirthdays() {
-        $Birthdays = json_decode(Gdn::Get('BirthdayModule.Birthdays'));
-        if ($Birthdays && $Birthdays[0] == date('y-m-d/H')) {
-            return $Birthdays[1];
+    protected function getBirthdays() {
+        $birthdays = json_decode(Gdn::get('BirthdayModule.Birthdays'));
+        $token = date('y-m-d/H');
+        
+        if ($birthdays && $birthdays[0] == $token) {
+            return $birthdays[1];
         }
-        $GuestTimeZone = C('Garden.GuestTimeZone');
-        $Date = new DateTime();
-        if ($GuestTimeZone) {
+        
+        $date = new DateTime();
+        if ($guestTimeZone = C('Garden.GuestTimeZone')) {
             try {
-                $TimeZone = new DateTimeZone($GuestTimeZone);
-                $HourOffset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
-                $HourOffset = - floor($HourOffset / 3600);
-                $Date->modify("$HourOffset hours");
+                $timeZone = new DateTimeZone($guestTimeZone);
+                $offset = $timeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
+                $offset = - floor($offset / 3600);
+                $date->modify("$offset hours");
             } catch (Exception $e) {}
         }
-        $Birthdays = Gdn::SQL()
-            ->Select('UserID')
-            ->From('User')
-            ->Where("DATE_FORMAT(DateOfBirth, '%m-%d')", $Date->format("'m-d'"), false, false)
-            ->Get()
-            ->Result(DATASET_TYPE_ARRAY);
-        $Birthdays = ConsolidateArrayValuesByKey($Birthdays, 'UserID');
-        Gdn::Set('BirthdayModule.Birthdays', json_encode(array(date('y-m-d/H'), $Birthdays)));
-        return $Birthdays;
+        
+        $birthdays = Gdn::sql()
+            ->select('UserID')
+            ->from('User')
+            ->where("DATE_FORMAT(DateOfBirth, '%m-%d')", $date->format("'m-d'"), false, false)
+            ->get()
+            ->resultArray();
+        $birthdays = array_column($birthdays, 'UserID');
+
+        Gdn::set('BirthdayModule.Birthdays', json_encode(array($token, $birthdays)));
+        return $birthdays;
     }
 
-    public function ToString() {
-        $Birthdays = $this->GetBirthdays();
-        if (empty($Birthdays)) {
+    public function toString() {
+        $users = Gdn::UserModel()->GetIDs($this->getBirthdays());
+        if (!$users) {
             return;
         }
-        Gdn::UserModel()->GetIDs($Birthdays);
-        $Return = '<div class="Box BirthdayModule"><h4>'
-            .Plural(count($Birthdays), T("Today's Birthday"), T("Today's Birthdays"))
+        $return = '<div class="Box BirthdayModule"><h4>'
+            .plural(count($users), T("Today's Birthday"), T("Today's Birthdays"))
             .'</h4><p>';
-        foreach ($Birthdays as $Birthday) {
-            $Return .= UserPhoto(Gdn::UserModel()->GetID($Birthday), 'Medium').' ';
+        foreach ($users as $user) {
+            $return .= userPhoto($user, 'Medium').' ';
         }
-        $Return .= '</p></div>';
-        return $Return;
+        $return .= '</p></div>';
+        return $return;
     }
 
 }
