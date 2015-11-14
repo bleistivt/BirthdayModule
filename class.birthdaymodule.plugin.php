@@ -1,13 +1,13 @@
 <?php
 
-$PluginInfo['BirthdayModule'] = array(
+$PluginInfo['BirthdayModule'] = [
     'Name' => 'Birthday Module',
     'Description' => 'Adds a module showing today\'s birthdays to the Panel. Requires ProfileExtender with the "Birthday" field enabled.',
     'Version' => '0.2',
     'Author' => 'Bleistivt',
     'AuthorUrl' => 'http://bleistivt.net',
     'License' => 'GNU GPL2'
-);
+];
 
 class BirthdayModulePlugin extends Gdn_Plugin {
 
