@@ -32,7 +32,7 @@ class BirthdayModule extends Gdn_Module {
             ->resultArray();
         $birthdays = array_column($birthdays, 'UserID');
 
-        Gdn::set('BirthdayModule.Birthdays', json_encode(array($token, $birthdays)));
+        Gdn::set('BirthdayModule.Birthdays', json_encode([$token, $birthdays]));
         return $birthdays;
     }
 
