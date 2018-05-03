@@ -19,7 +19,7 @@ class BirthdayModule extends Gdn_Module {
             try {
                 $timeZone = new DateTimeZone($guestTimeZone);
                 $offset = $timeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
-                $offset = - floor($offset / 3600);
+                $offset = floor($offset / 3600);
                 $date->modify("$offset hours");
             } catch (Exception $e) {}
         }
