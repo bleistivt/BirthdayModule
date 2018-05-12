@@ -39,7 +39,7 @@ class BirthdayModule extends Gdn_Module {
     public function toString() {
         $users = Gdn::UserModel()->GetIDs($this->getBirthdays());
         if (!$users) {
-            return;
+            return '';
         }
         $return = '<div class="Box BirthdayModule"><h4>'
             .plural(count($users), T("Today's Birthday"), T("Today's Birthdays"))
