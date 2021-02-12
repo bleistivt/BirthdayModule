@@ -15,7 +15,7 @@ class BirthdayModule extends Gdn_Module {
         }
 
         $date = new DateTime();
-        if ($guestTimeZone = C('Garden.GuestTimeZone')) {
+        if ($guestTimeZone = Gdn::config('Garden.GuestTimeZone')) {
             try {
                 $timeZone = new DateTimeZone($guestTimeZone);
                 $offset = $timeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
@@ -42,7 +42,7 @@ class BirthdayModule extends Gdn_Module {
             return '';
         }
         $return = '<div class="Box BirthdayModule"><h4>'
-            .plural(count($users), T("Today's Birthday"), T("Today's Birthdays"))
+            .plural(count($users), Gdn::translate("Today's Birthday"), Gdn::translate("Today's Birthdays"))
             .'</h4><p>';
         foreach ($users as $user) {
             $return .= userPhoto($user, 'Medium').' ';
